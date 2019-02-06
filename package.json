@@ -1,0 +1,16 @@
+{
+  "name": "node_project",
+  "version": "1.0.0",
+  "description": "epsrima task and test with jest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Maor Yatskan",
+  "license": "ISC",
+  "dependencies": {
+    "esprima": "^4.0.1",
+    "jest": "^24.1.0",
+    "nodegit": "^0.24.0"
+  }
+}
