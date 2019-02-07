@@ -10,7 +10,10 @@ var typeChecks = require('./Rules')
 const funcArr = [pushVariableNames,pushParameterNames,pushClassNames
         ,pushMethodNames,pushFunctionNames,pushPropertyNames];
 var isVar = typeChecks.isVariableDeclaraction;
-
+var isfuncOrArrowfunc= function(node) {
+    return typeChecks.isFunctionExpression(node) || 
+    typeChecks.isArrowFunctionExpression(node);
+};
 var analyzeCode = function(code) {
     var ast = esprima.parse(code);
     traverse(ast,funcArr);
@@ -46,7 +49,7 @@ function pushClassNames(node){
    }
 }
 function pushMethodNames(node){
-    //Sytax A: name = person.fullName();
+    //Syntax A: name = person.fullName();
     if (typeChecks.isMethod(node)){
         bag.append(new Identifier('Method',node.key.name));
    }
@@ -69,7 +72,7 @@ function pushPropertyNames(node){
     }
     // to catch :  firstName: "John"
     if (typeChecks.isProperty(node)){
-        if (!funcExp.includes(node.value.type)){
+        if (!isfuncOrArrowfunc(node.value)){
             if(node.key.hasOwnProperty('name')){
                  bag.append(new Identifier('Property',node.key.name));
             }

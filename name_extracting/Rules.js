@@ -11,7 +11,7 @@ module.exports = {
     isFunctionExpression: function (node) {
         return node.type == 'FunctionExpression';
     },
-    isArrrowFunctionExpression: function (node) {
+    isArrowFunctionExpression: function (node) {
         return node.type == 'ArrowFunctionExpression';
     },
     isClassDeclaration: function (node) {
@@ -28,8 +28,9 @@ module.exports = {
     }
     ,
     isMethod: function (node) {
-       return module.exports.isProperty(node) && (module.exports.isFunctionExpression(node.value) ||
-       module.exports.isArrowFunctionExpression(node.value));
+        return module.exports.isProperty(node) && 
+        (module.exports.isFunctionExpression(node.value) ||
+            module.exports.isArrowFunctionExpression(node.value));
     }
 
 }
