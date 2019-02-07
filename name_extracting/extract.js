@@ -3,36 +3,33 @@
 // and also 
 var fs = require('fs'),
     esprima = require('esprima');
+var IdentifierBag = require('./IdentifierBag');
+var Identifier = require('./Identifier');
+var bag = new IdentifierBag();
+
 const funcArr = [pushVariableNames,pushParameterNames,pushClassNames
         ,pushMethodNames,pushFunctionNames,pushPropertyNames];
 const funcExp = ['FunctionExpression','ArrowFunctionExpression'];
-const found = {
-    variables: [],
-    parameters: [],
-    classes: [],
-    methods: [],
-    functions: [],
-    properties: []
+function isVar(node){
+    return node.type == 'VariableDeclaration' ;
+}
+module.exports = {
+    isVar: isVar
 }
 var analyzeCode = function(code) {
     var ast = esprima.parse(code);
-    
     traverse(ast,funcArr);
-    console.log(found);
-    
-    
+   
 }
-exports.isVariableDecleration = function(node){
-    return node.type == 'VariableDeclaration' ;
-}
+
 function pushVariableNames(node){
-    if (node.type == 'VariableDeclaration' ){
+    if (isVar(node)){
         if (node.hasOwnProperty('declarations')){
         node.declarations.forEach(declaration => {
             if(declaration.init.type == 'FunctionExpression'){
-                found.functions.push(declaration.id.name);
+                bag.append(new Identifier('Function',declaration.id.name));
             }else{
-                found.variables.push(declaration.id.name);
+                bag.append(new Identifier('Variable',declaration.id.name));
             }
         });
     }
@@ -42,7 +39,7 @@ function pushVariableNames(node){
 function pushParameterNames(node){
     if (node.type == 'FunctionDeclaration' || node.type =='FunctionExpression'){
         node.params.forEach(element => {
-            found.parameters.push(element.name);
+            bag.append(new Identifier('Parameter',element.name));
         });
         
     }
@@ -50,41 +47,39 @@ function pushParameterNames(node){
 
 function pushClassNames(node){
     if (node.type == 'ClassDeclaration'){
-       found.classes.push(node.id.name);
+       bag.append(new Identifier('Class',node.id.name));
    }
 }
 function pushMethodNames(node){
+    //Sytax A: name = person.fullName();
     if (node.type == 'Property' && funcExp.includes(node.value.type)){
-        found.methods.push(node.key.name);
+        bag.append(new Identifier('Method',node.key.name));
    }
-   // to include also this type:
-   //  person.name = function () {
-   //  return this.firstName + " " + this.lastName;
-   //};
+   // Syntax B: person.name = function () {}
    if (node.type == 'AssignmentExpression' && node.left.type == 'MemberExpression' 
         && node.right.type == 'FunctionExpression'){
-        found.methods.push(node.left.property.name);
+        bag.append(new Identifier('Method',node.left.property.name));
     }
 }
 function pushFunctionNames(node){
     if (node.type == 'FunctionDeclaration'){   
-       found.functions.push(node.id.name);
+       bag.append(new Identifier('Function',node.id.name));
     }
 }
 function pushPropertyNames(node){
     // to catch : this.height = height;
     if (node.type == 'AssignmentExpression' && node.left.type == 'MemberExpression' 
         && node.right.type == 'Identifier'){
-        found.properties.push(node.right.name);
+        bag.append(new Identifier('Property',node.right.name));
     }
     // to catch :  firstName: "John"
     if (node.type == 'Property'){
         if (!funcExp.includes(node.value.type)){
             if(node.key.hasOwnProperty('name')){
-                 found.properties.push(node.key.name);
+                 bag.append(new Identifier('Property',node.key.name));
             }
             else if(node.key.hasOwnProperty('raw')){
-                found.properties.push(String(node.key.raw).replace(/'/g,''));
+                bag.append(new Identifier('Property',String(node.key.raw).replace(/'/g,'')));
            }
 
            
@@ -94,12 +89,11 @@ function pushPropertyNames(node){
 function traverse(node, funcArr) {
    funcArr.forEach(func => func(node))
 
-    for (var key in node) { //2
-        if (node.hasOwnProperty(key)) { //3
-            var child = node[key];
-            if (typeof child === 'object' && child !== null) { //4
-
-                if (Array.isArray(child)) {
+    for (var key in node) { //iterate on root propreties
+        if (node.hasOwnProperty(key)) { //if key is property of the root
+            var child = node[key]; //child= prorety
+            if (typeof child === 'object' && child !== null) { //if property is object
+                if (Array.isArray(child)) { //child can be object or array
                     child.forEach(node => traverse(node, funcArr));
                 } else {
                     traverse(child, funcArr); //6
@@ -108,16 +102,17 @@ function traverse(node, funcArr) {
         }
     }
 }
-// 2
+/*
 if (process.argv.length < 3) {
     console.log('Usage: extract.js demo_file.js');
     process.exit(1);
 }
 
-// 3
 var filename = process.argv[2];
+*/
+var filename = './../name_extracting/demo_file.js'
 console.log('Reading ' + filename);
 var code = fs.readFileSync(filename, 'utf-8');
-
 analyzeCode(code);
+console.log(bag.bag);
 console.log('Done');
