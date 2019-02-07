@@ -1,32 +1,27 @@
 // we've found anormalization of method decleration in js (2 type of syntax)
-// I consider property:function(){} as Method
-// and also 
+
 var fs = require('fs'),
     esprima = require('esprima');
 var IdentifierBag = require('./IdentifierBag');
 var Identifier = require('./Identifier');
 var bag = new IdentifierBag();
+var typeChecks = require('./Rules')
 
 const funcArr = [pushVariableNames,pushParameterNames,pushClassNames
         ,pushMethodNames,pushFunctionNames,pushPropertyNames];
-const funcExp = ['FunctionExpression','ArrowFunctionExpression'];
-function isVar(node){
-    return node.type == 'VariableDeclaration' ;
-}
-module.exports = {
-    isVar: isVar
-}
+var isVar = typeChecks.isVariableDeclaraction;
+
 var analyzeCode = function(code) {
     var ast = esprima.parse(code);
     traverse(ast,funcArr);
    
 }
-
+// var x = function(){} or var x = 0
 function pushVariableNames(node){
     if (isVar(node)){
         if (node.hasOwnProperty('declarations')){
         node.declarations.forEach(declaration => {
-            if(declaration.init.type == 'FunctionExpression'){
+            if(typeChecks.isFunctionExpression(declaration.init)){
                 bag.append(new Identifier('Function',declaration.id.name));
             }else{
                 bag.append(new Identifier('Variable',declaration.id.name));
@@ -37,7 +32,7 @@ function pushVariableNames(node){
    }
 }
 function pushParameterNames(node){
-    if (node.type == 'FunctionDeclaration' || node.type =='FunctionExpression'){
+    if (typeChecks.isFunctionDeclaraction(node) || typeChecks.isFunctionExpression(node)){
         node.params.forEach(element => {
             bag.append(new Identifier('Parameter',element.name));
         });
@@ -46,13 +41,13 @@ function pushParameterNames(node){
 }
 
 function pushClassNames(node){
-    if (node.type == 'ClassDeclaration'){
+    if (typeChecks.isClassDeclaration(node)){
        bag.append(new Identifier('Class',node.id.name));
    }
 }
 function pushMethodNames(node){
     //Sytax A: name = person.fullName();
-    if (node.type == 'Property' && funcExp.includes(node.value.type)){
+    if (typeChecks.isMethod(node)){
         bag.append(new Identifier('Method',node.key.name));
    }
    // Syntax B: person.name = function () {}
@@ -62,7 +57,7 @@ function pushMethodNames(node){
     }
 }
 function pushFunctionNames(node){
-    if (node.type == 'FunctionDeclaration'){   
+    if (typeChecks.isFunctionDeclaraction(node)){   
        bag.append(new Identifier('Function',node.id.name));
     }
 }
@@ -73,7 +68,7 @@ function pushPropertyNames(node){
         bag.append(new Identifier('Property',node.right.name));
     }
     // to catch :  firstName: "John"
-    if (node.type == 'Property'){
+    if (typeChecks.isProperty(node)){
         if (!funcExp.includes(node.value.type)){
             if(node.key.hasOwnProperty('name')){
                  bag.append(new Identifier('Property',node.key.name));
