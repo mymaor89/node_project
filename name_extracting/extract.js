@@ -108,9 +108,13 @@ if (process.argv.length < 3) {
 
 var filename = process.argv[2];
 */
+function normalize(bag){
+
+}
 var filename = './../name_extracting/demo_file.js'
 console.log('Reading ' + filename);
 var code = fs.readFileSync(filename, 'utf-8');
 analyzeCode(code);
 console.log(bag.bag);
+//normalize(bag);
 console.log('Done');

@@ -1,3 +1,9 @@
+var person = {
+    name: "moshe",
+    age: 45
+    
+}
+person.name = function () {}
 var counter = function(arr){
     return 'there are '+ arr.length + ' elements in this array';
 };

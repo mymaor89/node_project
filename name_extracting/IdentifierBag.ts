@@ -1,7 +1,7 @@
 module.exports = class IdentifierBag{
     constructor (){
-        this.bag = [];
-    }
+            this.bag = [];
+        }
 
     append(identifer) {
         this.bag.push(identifer);

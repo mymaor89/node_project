@@ -1,36 +1,37 @@
-module.exports = {
-    isVariableDeclaraction: function (node) {
+"use strict";
+exports.__esModule = true;
+var Rules = /** @class */ (function () {
+    function Rules() {
+    }
+    Rules.isVariableDeclaraction = function (node) {
         return node.type == 'VariableDeclaration';
-    },
-    isFunctionDeclaraction: function (node) {
+    };
+    Rules.isFunctionDeclaraction = function (node) {
         return node.type == 'FunctionDeclaration';
-    },
-    isFunctionDeclaractio: function (node) {
-        return node.type == 'FunctionDeclaration';
-    },
-    isFunctionExpression: function (node) {
+    };
+    Rules.isFunctionExpression = function (node) {
         return node.type == 'FunctionExpression';
-    },
-    isArrowFunctionExpression: function (node) {
+    };
+    Rules.isArrowFunctionExpression = function (node) {
         return node.type == 'ArrowFunctionExpression';
-    },
-    isClassDeclaration: function (node) {
+    };
+    Rules.isClassDeclaration = function (node) {
         return node.type == 'ClassDeclaration';
-    },
-    isProperty: function (node) {
+    };
+    Rules.isProperty = function (node) {
         return node.type == 'Property';
-    },
-    isArrayDecleration: function (variableDecleration) {
+    };
+    Rules.isArrayDecleration = function (variableDecleration) {
         return variableDecleration.init.type == 'ArrayExpression';
-    },
-    isObjectLiteral: function (variableDecleration) {
+    };
+    Rules.isObjectLiteral = function (variableDecleration) {
         return variableDecleration.init.type == 'ObjectExpression';
-    }
-    ,
-    isMethod: function (node) {
-        return module.exports.isProperty(node) && 
-        (module.exports.isFunctionExpression(node.value) ||
-            module.exports.isArrowFunctionExpression(node.value));
-    }
-
-}
+    };
+    Rules.isMethod = function (node) {
+        return this.isProperty(node) &&
+            (this.isFunctionExpression(node.value) ||
+                this.isArrowFunctionExpression(node.value));
+    };
+    return Rules;
+}());
+exports.Rules = Rules;
