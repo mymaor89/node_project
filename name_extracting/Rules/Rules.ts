@@ -15,9 +15,7 @@ export abstract class Rules{
         }
     }
    /*
-    static isFunctionDeclaraction(node):boolean {
-        return node.type == 'FunctionDeclaration';
-    }
+   
     static isFunctionExpression(node):boolean {
         return node.type == 'FunctionExpression';
     }

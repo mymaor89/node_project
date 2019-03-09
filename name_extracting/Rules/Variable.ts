@@ -7,7 +7,7 @@ export class Variable extends Rules{
     }
 
     // @FIXME 
-    handle(node) {
+    handle(node: any): Identifier | Identifier[] {
         
         //if (node.hasOwnProperty('declarations')){
         return node.declarations.map(declaration => new Identifier(
@@ -21,5 +21,5 @@ export class Variable extends Rules{
                 ? IdentifierType.Function
                 : IdentifierType.Variable;
     }
-        //flat
+        
 }
