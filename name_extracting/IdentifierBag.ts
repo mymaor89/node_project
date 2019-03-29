@@ -1,5 +1,7 @@
-module.exports = class IdentifierBag{
-    constructor (){
+export class IdentifierBag{
+    protected bag: any[]
+    
+    constructor() {
             this.bag = [];
         }
 

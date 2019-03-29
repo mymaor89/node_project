@@ -2,26 +2,41 @@ export enum IdentifierType  {
     Variable,
     Function,
     Class,
+    Parameter,
+    Method,
+    Property
 }
 
 export class Identifier {
-    protected name: string
-    protected type: IdentifierType //TODO use esprima types
+    readonly name: string
+    readonly type: IdentifierType //TODO use esprima types
 
     constructor(name: string, type: IdentifierType) {
         this.name = name
         this.type = type
     }
 
-    getName() : string {
-        return this.name;
+    get hasName() :boolean {
+        return this.name && this.name.length > 0     
     }
     
-    getType() : IdentifierType{
-        return this.type;
-    }
-
-    static fromClass(name :string){
+    static fromClass(name : string) :Identifier {
         return new this(name, IdentifierType.Class)
     }
+
+    static fromFunction(name : string) {
+        return new this(name, IdentifierType.Function)
+    }
+    
+    static fromParameter(name: string) {
+       return new this(name, IdentifierType.Parameter)
+    }
+    
+    static fromMethod(name: string) {
+        return new this(name, IdentifierType.Method)
+    }
+    static fromVariable(name: string) {
+        return new this(name, IdentifierType.Variable)
+    }
+    
 }

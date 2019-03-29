@@ -1,43 +1,45 @@
 import { Identifier } from "../Identifier";
 
-export abstract class Rules{
-    protected declaration = `${this.constructor.name}Declaration`
+export abstract class Rules {
 
-    protected conforms(node) : boolean {
-        return node.type === this.declaration
+    protected readonly node: any
+
+    constructor(node: any) {
+        this.node = node
+    }
+    protected declaration = `${this.constructor.name}Declaration` //Template literal (ES6)
+
+    protected conforms(): boolean {
+        return this.node.type === this.declaration
     }
 
-    abstract handle(node) : Identifier | Identifier[]
+    abstract handle(): Identifier | Identifier[] 
 
-    extract (node){
-        if (this.conforms(node)){
-            this.handle(node)
-        }
+    extract(): Identifier | Identifier[]| boolean {
+        if (this.conforms())
+            return this.handle()
+        else
+            return false
+
     }
-   /*
-   
-    static isFunctionExpression(node):boolean {
-        return node.type == 'FunctionExpression';
-    }
-   static isArrowFunctionExpression(node):boolean {
-        return node.type == 'ArrowFunctionExpression';
-    }
-    static isClassDeclaration(node):boolean {
-        return node.type == 'ClassDeclaration';
-    }
-    static isProperty(node):boolean {
-        return node.type == 'Property';
-    }
-    static isArrayDecleration(variableDecleration) : boolean{
-        return variableDecleration.init.type == 'ArrayExpression';
-    }
-    static isObjectLiteral(variableDecleration): boolean {
-        return variableDecleration.init.type == 'ObjectExpression';
-    }
-    static isMethod (node) : boolean{
-        return this.isProperty(node) && 
-        (this.isFunctionExpression(node.value) ||
-            this.isArrowFunctionExpression(node.value));
-    }
-*/
+    /*
+    
+     static isFunctionExpression(node):boolean {
+         return node.type == 'FunctionExpression';
+     }
+    static isArrowFunctionExpression(node):boolean {
+         return node.type == 'ArrowFunctionExpression';
+     }
+     static isClassDeclaration(node):boolean {
+         return node.type == 'ClassDeclaration';
+     }
+    
+     static isArrayDecleration(variableDecleration) : boolean{
+         return variableDecleration.init.type == 'ArrayExpression';
+     }
+     static isObjectLiteral(variableDecleration): boolean {
+         return variableDecleration.init.type == 'ObjectExpression';
+     }
+    
+ */
 }

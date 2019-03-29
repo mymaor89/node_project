@@ -1,0 +1,4 @@
+# Files
+package.json
+# Directories
+node_modules/
