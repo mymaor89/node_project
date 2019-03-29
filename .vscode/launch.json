@@ -16,7 +16,7 @@
                 "--timeout",
                 "999999",
                 "--colors","--recursive",
-                "${workspaceFolder}/test/**/*.spec.ts" ,"--transpileOnly"
+                "./test/**/*.spec.ts" ,"--transpileOnly"
             ],
             "internalConsoleOptions": "openOnSessionStart"
         },

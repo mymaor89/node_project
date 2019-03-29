@@ -7,7 +7,6 @@ export class Variable extends Rules {
     }
     
     handle(): Identifier | Identifier[] {
-        console.log(Array.isArray(this.node.declarations))
         return this.node.declarations.map(declaration => new Identifier(
             declaration.id.name,
             this.identifierType(declaration)
