@@ -1,20 +1,30 @@
 import { Rules } from './Rules'
-import { Identifier} from '../Identifier';
+import { Identifier } from '../Identifier';
+import { ExpressionStatement, AssignmentExpression } from 'estree';
+import { MemberExpression } from '@babel/types';
 
 export class MethodExpression extends Rules {
-    //Syntax A: name = person.fullName();
     protected conforms(): boolean {
-        const isFunction = this.node.value === 'FunctionExpression'
-            || this.node.value === 'ArrowFunctionExpression'
 
-        return this.node.type === 'Property' && isFunction
+        /*
+        X= {}
+        X.someMethod= function(){
+             console.log('someMethod')
+        }
+        X.someMethod()
+        */
+        
+        return this.node.type === 'ExpressionStatement'
+            && this.node.expression.type === 'AssignmentExpression'
+            && this.node.expression.left.type === 'MemberExpression'
+            && this.node.expression.right.type === 'FunctionExpression'
+
     }
 
- 
-    handle(): Identifier | Identifier[] {
-        //Syntax A: name = person.fullName();
-        return Identifier.fromMethod(this.node.key.name)
 
+    handle(): Identifier | Identifier[] {
+        let assignment : AssignmentExpression=((this.node as ExpressionStatement).expression) as AssignmentExpression
+        return Identifier.fromMethod((assignment.left as unknown  as MemberExpression).property.name)
     }
 
 }

@@ -4,10 +4,14 @@ export enum IdentifierType  {
     Class,
     Parameter,
     Method,
-    Property
+    Property,
+    ArrowFunction,
+    Array,
+    Object_Literal
 }
 
 export class Identifier {
+ 
     readonly name: string
     readonly type: IdentifierType //TODO use esprima types
 
@@ -31,12 +35,24 @@ export class Identifier {
     static fromParameter(name: string) {
        return new this(name, IdentifierType.Parameter)
     }
-    
+    static fromProperty(name: string) {
+        return new this(name, IdentifierType.Property)
+     }
+     
     static fromMethod(name: string) {
         return new this(name, IdentifierType.Method)
     }
     static fromVariable(name: string) {
         return new this(name, IdentifierType.Variable)
     }
+    static fromArrowFunction(name: string) {
+        return new this(name, IdentifierType.ArrowFunction)
+    }
     
+    static fromArray(name: string) {
+        return new this(name, IdentifierType.Array)
+    }
+    static fromObjectLiteral(name: any): Identifier {
+        return new this(name, IdentifierType.Object_Literal)
+    }
 }

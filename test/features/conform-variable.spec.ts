@@ -8,7 +8,7 @@ describe("recognize variable", () => {
         it('extracts a variable from a variable declaration', () => {
             ['var x = 9', 'let x = 9', 'const x = 9'].forEach(declaration => {
                 const identifyer = new Variable(createNode(declaration)).extract()
-
+            
                 expect(identifyer).to.be.an('array').with.lengthOf(1)
                 expect(identifyer[0]).to.have.property('name', 'x')
                 expect(identifyer[0]).to.be.instanceOf(Identifier)
@@ -42,18 +42,51 @@ describe("recognize variable", () => {
                 expect(identifyer[0]).to.have.property('type', IdentifierType.Function)
             })
         })
-        it('can extracted a mixed decleration', () => {
-            ['var x = 9,y= function(){return true}'].forEach(declaration => {
+        it('should extract Arrow Function decleration identifier ', () => {
+            ['const add = (a, b) => a + b'].forEach(declaration => {
                 const identifyer = new Variable(createNode(declaration)).extract()
-                expect(identifyer).to.be.an('array').with.lengthOf(2)
+                expect(identifyer).to.be.an('array').with.lengthOf(1)
+                expect(identifyer[0]).to.have.property('name', 'add')
+                expect(identifyer[0]).to.be.instanceOf(Identifier)
+                expect(identifyer[0]).to.have.property('type', IdentifierType.ArrowFunction)
+            })
+        })
+        it('should extract array decleration identifier ', () => {
+            ['var x = [1,2,3]'].forEach(declaration => {
+                const identifyer = new Variable(createNode(declaration)).extract()
+
+                expect(identifyer).to.be.an('array').with.lengthOf(1)
+                expect(identifyer[0]).to.have.property('name', 'x')
+                expect(identifyer[0]).to.be.instanceOf(Identifier)
+                expect(identifyer[0]).to.have.property('type', IdentifierType.Array)
+            })
+        })
+        
+        it('should extract object literal decleration identifier ', () => {
+            ['var myObject = {  prop1: "hello",  prop2: "world"  }'].forEach(declaration => {
+                const identifyer = new Variable(createNode(declaration)).extract()
+
+                expect(identifyer).to.be.an('array').with.lengthOf(1)
+                expect(identifyer[0]).to.have.property('name', 'myObject')
+                expect(identifyer[0]).to.be.instanceOf(Identifier)
+                expect(identifyer[0]).to.have.property('type', IdentifierType.Object_Literal)
+            })
+        })
+        it('can extracted a mixed decleration', () => {
+            ['var x = 9,y= function(){return true},z=["hey","bye"]'].forEach(declaration => {
+                const identifyer = new Variable(createNode(declaration)).extract()
+                expect(identifyer).to.be.an('array').with.lengthOf(3)
                 expect(identifyer[0]).to.have.property('name', 'x')
                 expect(identifyer[1]).to.have.property('name', 'y')
-                 
+                expect(identifyer[2]).to.have.property('name', 'z')
+
                 expect(identifyer[0]).to.be.instanceOf(Identifier)
                 expect(identifyer[1]).to.be.instanceOf(Identifier)
-   
+                expect(identifyer[2]).to.be.instanceOf(Identifier)
+
                 expect(identifyer[0]).to.have.property('type', IdentifierType.Variable)
                 expect(identifyer[1]).to.have.property('type', IdentifierType.Function)
+                expect(identifyer[2]).to.have.property('type', IdentifierType.Array)
             })
         })
 
@@ -66,7 +99,7 @@ describe("recognize variable", () => {
           
         })
     })
-
+    
     function createNode(expression) {
         return esprima.parseScript(expression).body.pop()
     }

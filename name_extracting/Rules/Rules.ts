@@ -1,10 +1,11 @@
 import { Identifier } from "../Identifier";
+import { Node } from "estree";
 
 export abstract class Rules {
 
-    protected readonly node: any
+    protected readonly node: Node
 
-    constructor(node: any) {
+    constructor(node: Node) {
         this.node = node
     }
     protected declaration = `${this.constructor.name}Declaration` //Template literal (ES6)
@@ -22,24 +23,4 @@ export abstract class Rules {
             return false
 
     }
-    /*
-    
-     static isFunctionExpression(node):boolean {
-         return node.type == 'FunctionExpression';
-     }
-    static isArrowFunctionExpression(node):boolean {
-         return node.type == 'ArrowFunctionExpression';
-     }
-     static isClassDeclaration(node):boolean {
-         return node.type == 'ClassDeclaration';
-     }
-    
-     static isArrayDecleration(variableDecleration) : boolean{
-         return variableDecleration.init.type == 'ArrayExpression';
-     }
-     static isObjectLiteral(variableDecleration): boolean {
-         return variableDecleration.init.type == 'ObjectExpression';
-     }
-    
- */
 }

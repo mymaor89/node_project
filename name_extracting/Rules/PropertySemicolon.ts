@@ -1,8 +1,8 @@
-import { Rules } from './Rules'
+ /*import { Rules } from './Rules'
 import { Identifier, IdentifierType } from '../Identifier';
 export class PropertySemicolon extends Rules {
 
-    private static isfuncOrArrowfunc(element :any) :boolean {
+   private static isfuncOrArrowfunc(element :any) :boolean {
         return element === 'FunctionExpression' || element === 'ArrowFunctionExpression'
     }
 
@@ -14,7 +14,7 @@ export class PropertySemicolon extends Rules {
             else if (this.node.key.hasOwnProperty('raw')) {
                 return new Identifier(String(this.node.key.raw).replace(/'/g, ''), IdentifierType.Property);
             }
-        }
+        }S
     }
 
     conforms(): boolean {
@@ -24,3 +24,4 @@ export class PropertySemicolon extends Rules {
     
 
 }
+*/

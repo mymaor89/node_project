@@ -1,4 +1,4 @@
-import { Rules } from './Rules'
+/*import { Rules } from './Rules'
 import { Identifier, IdentifierType } from '../Identifier';
 export class PropertyAsignment extends Rules {
 
@@ -15,4 +15,4 @@ export class PropertyAsignment extends Rules {
     }
   
 }
-    
+    */
