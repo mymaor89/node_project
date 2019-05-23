@@ -13,7 +13,7 @@ import { Program, Node } from 'estree';
 export class Tree {
     code: string
 
-    protected rules: any[] = [Variable]//, Class, Function]
+    protected rules: any[] = [Variable, Class, Function]//
         //,PropertyAsignment, PropertySemicolon] //MethodExpression
     
     constructor(file: string) {
@@ -23,7 +23,7 @@ export class Tree {
     }
 
     collect(): IdentifierBag {
-        return this.traverse(new IdentifierBag());
+        return (this.traverse(new IdentifierBag()));
     }
 
     protected extractNode(node: Node): Identifier | Identifier[] {

@@ -9,9 +9,10 @@ describe.only("Extract from js file", () => {
         const path = "./test/resources/fake-file.js"
         // when
         const tree = new Tree(path);
-        let bag: IdentifierBag =  tree.collect()
+        let bag: IdentifierBag = tree.collect()
+        bag.filter()
         console.log(bag)
-        //expect(bag).to.be.instanceOf(IdentifierBag)
+        expect(bag).to.be.instanceOf(IdentifierBag)
         //expect(bag.size).to.be.equal(12)
         
         

@@ -1,6 +1,6 @@
 export class IdentifierBag{
     protected bag: any[]
-    public size: number
+    public size: number = 0
     constructor() {
             this.bag = []
         }
@@ -10,8 +10,7 @@ export class IdentifierBag{
         this.size++
     }
 
-    filter(arg) {
-        
-        this.bag = this.bag.flat().filter(Boolean).flat()
+    public filter() {
+        this.bag = this.bag.flat(2).filter(Boolean).flat()
    }
 }

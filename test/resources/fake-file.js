@@ -16,6 +16,12 @@ var counter = function(arr){
 var adder  = function(a,b){
     return 'The sum of 2 numbers is ${a+b}';
 };
+class Hero {
+  constructor(name, level) {
+      this.name = name;
+      this.level = level;
+  }
+}
 var x = 10;
 let j = 4;
 const z = 32;
